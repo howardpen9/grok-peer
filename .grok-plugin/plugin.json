@@ -1,0 +1,19 @@
+{
+  "name": "grok-peer",
+  "version": "0.1.0",
+  "description": "Peer slash commands for Grok Build: call local Codex (review) and Kimi (bulk analyze) like Claude's official /codex peer flow.",
+  "author": {
+    "name": "Howard Peng",
+    "url": "https://github.com/howardpen9"
+  },
+  "homepage": "https://github.com/howardpen9/grok-peer",
+  "repository": "https://github.com/howardpen9/grok-peer",
+  "license": "MIT",
+  "keywords": [
+    "grok-peer",
+    "codex-review",
+    "kimi-analyze",
+    "peer-review",
+    "grok-build"
+  ]
+}
