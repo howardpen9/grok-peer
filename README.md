@@ -1,5 +1,11 @@
 # grok-peer
 
+<!-- social preview: assets/social-preview.png -->
+<p align="center">
+  <img src="assets/social-preview.png" alt="grok-peer — Peer slash commands for Grok Build" width="100%" />
+</p>
+
+
 **Peer slash commands for [Grok Build](https://x.ai/cli)** — call local **Codex** and **Kimi** the way Claude users call `/codex`.
 
 Grok is the conductor. Peers stay on their own CLIs (and logins). This plugin is the **call surface**, not a second ADE and not a remote multi-agent service.
