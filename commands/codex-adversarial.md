@@ -11,7 +11,7 @@ Pressure-test the current change with Codex. Read-only.
 ## Instructions
 
 ```bash
-SCRIPT="$(ls -1 "$HOME"/.grok/installed-plugins/grok-peer*/scripts/codex-review.sh 2>/dev/null | head -1)"
+SCRIPT="$(find "$HOME"/.grok/installed-plugins -type f -path '*/scripts/codex-review.sh' 2>/dev/null | xargs ls -t 2>/dev/null | head -1)"
 if [ -z "${SCRIPT:-}" ]; then
   echo "grok-peer: scripts missing — reinstall plugin" >&2
   exit 1

@@ -11,18 +11,14 @@ if [[ -f "$SELF_DIR/$NAME" ]]; then
   exit 0
 fi
 
-# 2) Name-scoped installed-plugins (Grok copies plugin under ~/.grok/installed-plugins/grok-peer-*)
-CAND="$(ls -1 "$HOME"/.grok/installed-plugins/grok-peer*/scripts/"$NAME" 2>/dev/null | head -1 || true)"
-if [[ -n "${CAND:-}" && -f "$CAND" ]]; then
-  echo "$CAND"
-  exit 0
-fi
-
-# 3) Any grok-peer install path
-CAND="$(find "$HOME"/.grok/installed-plugins -path '*/grok-peer*/scripts/'"$NAME" 2>/dev/null | head -1 || true)"
-if [[ -n "${CAND:-}" && -f "$CAND" ]]; then
-  echo "$CAND"
-  exit 0
+# 2) Newest match under installed-plugins (covers grok-peer-* and hash local dirs like -8b6831d6)
+if [[ -d "$HOME/.grok/installed-plugins" ]]; then
+  CAND="$(find "$HOME/.grok/installed-plugins" -type f -path "*/scripts/${NAME}" 2>/dev/null \
+    | xargs ls -t 2>/dev/null | head -1 || true)"
+  if [[ -n "${CAND:-}" && -f "$CAND" ]]; then
+    echo "$CAND"
+    exit 0
+  fi
 fi
 
 echo "grok-peer: cannot find scripts/$NAME (reinstall plugin: grok plugin install <path> --trust)" >&2

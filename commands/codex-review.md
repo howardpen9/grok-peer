@@ -10,10 +10,10 @@ Run a **read-only** Codex review of the current work. Do not re-implement the re
 
 ## Instructions
 
-1. Resolve script (name-scoped):
+1. Resolve script (newest install — works for `grok-peer-*` and hash local dirs):
 
 ```bash
-SCRIPT="$(ls -1 "$HOME"/.grok/installed-plugins/grok-peer*/scripts/codex-review.sh 2>/dev/null | head -1)"
+SCRIPT="$(find "$HOME"/.grok/installed-plugins -type f -path '*/scripts/codex-review.sh' 2>/dev/null | xargs ls -t 2>/dev/null | head -1)"
 if [ -z "${SCRIPT:-}" ]; then
   echo "grok-peer: scripts missing — reinstall plugin" >&2
   exit 1

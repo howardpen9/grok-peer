@@ -13,7 +13,7 @@ Delegate heavy reading to Kimi. Prefer Kimi's summary over reading dozens of fil
 Default `--detail` is `summary` unless the user asks for more. Work dir = `pwd`.
 
 ```bash
-SCRIPT="$(ls -1 "$HOME"/.grok/installed-plugins/grok-peer*/scripts/kimi-analyze.sh 2>/dev/null | head -1)"
+SCRIPT="$(find "$HOME"/.grok/installed-plugins -type f -path '*/scripts/kimi-analyze.sh' 2>/dev/null | xargs ls -t 2>/dev/null | head -1)"
 if [ -z "${SCRIPT:-}" ]; then
   echo "grok-peer: scripts missing — reinstall plugin" >&2
   exit 1

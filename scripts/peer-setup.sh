@@ -41,6 +41,7 @@ echo ""
 echo "Peer CLIs"
 check_bin "Codex" "codex" "CODEX_BIN" 1
 check_bin "Kimi" "kimi" "KIMI_BIN" 1
+check_bin "Antigravity (agy)" "agy" "AGY_BIN" 0
 check_bin "Claude (optional v0.1)" "claude" "CLAUDE_BIN" 0
 
 echo ""
@@ -59,6 +60,14 @@ if [[ -n "${KIMICODE_API_KEY:-}" || -n "${KIMI_API_KEY:-}" ]]; then
 else
   echo "  —    no KIMICODE_API_KEY in env (CLI login may still work for kimi)"
 fi
+if peer_resolve_bin agy AGY_BIN >/dev/null 2>&1; then
+  if agy models >/dev/null 2>&1; then
+    echo "  OK   agy models list works (signed in)"
+  else
+    echo "  ?    agy present but models list failed (try interactive: agy  → Google sign-in)"
+    warn=$((warn + 1))
+  fi
+fi
 if [[ -n "${XAI_API_KEY:-}" ]]; then
   echo "  OK   XAI_API_KEY is set (optional for other tools)"
 else
@@ -71,6 +80,11 @@ echo "  /peer-setup           this check"
 echo "  /codex-review         Codex read-only review"
 echo "  /codex-adversarial    Codex challenge review"
 echo "  /kimi-analyze         Kimi bulk analyze (cwd)"
+echo "  /gemini               Gemini LLM task spin via agy (default YOLO implement)"
+echo "  /gemini --review      Gemini peer review (no skip-permissions)"
+echo "  /gemini --image       Gemini image via agy generate_image (not Grok /imagine)"
+echo "  /agy-run              alias → /gemini"
+echo "  /agy-review           alias → /gemini --review"
 
 echo ""
 echo "Summary: ok=$ok  warn=$warn  miss=$fail"

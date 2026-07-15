@@ -1,7 +1,7 @@
 {
   "name": "grok-peer",
-  "version": "0.1.0",
-  "description": "Peer slash commands for Grok Build: call local Codex (review) and Kimi (bulk analyze) like Claude's official /codex peer flow.",
+  "version": "0.3.1",
+  "description": "Peer slash for Grok Build: /codex-*, /kimi-analyze, /gemini (code|review|optional --image via agy). Grok media stays on host /imagine.",
   "author": {
     "name": "Howard Peng",
     "url": "https://github.com/howardpen9"
@@ -13,6 +13,10 @@
     "grok-peer",
     "codex-review",
     "kimi-analyze",
+    "gemini",
+    "agy-review",
+    "agy-run",
+    "antigravity",
     "peer-review",
     "grok-build"
   ]
