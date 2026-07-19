@@ -27,16 +27,27 @@ The ecosystem already solved **one direction** well: **Claude as main**, other m
 
 | Direction (main → peer) | Example | Status |
 | --- | --- | --- |
-| **Claude → Codex** | Official [`openai/codex-plugin-cc`](https://github.com/openai/codex-plugin-cc) (`/codex:review`, …) | ✅ Product-grade |
-| **Claude → Grok** | Community plugins (e.g. Claude↔Grok review / search wrappers) | ✅ Common |
-| **Claude → Kimi** | [`kimi-code-mcp`](https://github.com/howardpen9/kimi-code-mcp) as MCP tools | ✅ Transport ready |
-| **Codex → Grok / others** | Codex plugins / MCP bridges | △ Exists, uneven |
-| **Grok → Codex** | — | ❌ Thin / empty *(filled by this plugin)* |
-| **Grok → Kimi** | — | ❌ Thin / empty *(filled by this plugin)* |
-| **Grok → Antigravity (`agy`)** | — | ❌ Thin / empty *(filled by this plugin)* |
-| **Grok → Claude** | — | ❌ Thin / empty |
+| **🟧 Claude → ⬜ Codex** | Official [`openai/codex-plugin-cc`](https://github.com/openai/codex-plugin-cc) (`/codex:review`, …) | ✅ Product-grade |
+| **🟧 Claude → ⬛ Grok** | Community plugins (e.g. Claude↔Grok review / search wrappers) | ✅ Common |
+| **🟧 Claude → 🟪 Kimi** | [`kimi-code-mcp`](https://github.com/howardpen9/kimi-code-mcp) as MCP tools | ✅ Transport ready |
+| **⬜ Codex → ⬛ Grok / others** | Codex plugins / MCP bridges | △ Exists, uneven |
+| **⬛ Grok → ⬜ Codex** | — | ❌ Thin / empty *(filled by this plugin)* |
+| **⬛ Grok → 🟪 Kimi** | — | ❌ Thin / empty *(filled by this plugin)* |
+| **⬛ Grok → 🟦 Antigravity (`agy`)** | — | ❌ Thin / empty *(filled by this plugin)* |
+| **⬛ Grok → 🟧 Claude** | — | ❌ Thin / empty |
 
-**This package fills the Grok-as-main row.**
+<p>
+  <sub>
+    Color key:
+    🟧 Claude ·
+    ⬜ Codex ·
+    ⬛ Grok ·
+    🟪 Kimi ·
+    🟦 Antigravity (<code>agy</code>)
+  </sub>
+</p>
+
+**This package fills the Grok-as-main (⬛) row.**
 
 If your daily driver is **Grok Build**, opening Claude just to run `/codex` is the wrong UX. You want peers **where you already are**.
 
@@ -95,9 +106,12 @@ This is the confusion that shows up most often. **Peer call surface** and **host
 
 | Host (as main agent) | How you generate media | Engine (roughly) |
 | --- | --- | --- |
-| **Grok Build** | Built-in `/imagine`, `/imagine-video` (and agent Imagine tools) | **Grok Imagine** (xAI) |
-| **Antigravity (`agy`)** | Ask for images while working **inside** Antigravity / Gemini agent | **Nano Banana / Gemini Image** (Google) |
-| Claude Code, Codex, … | Not this table — depends on host features or add-on MCP | Varies |
+| **Grok Build** | Built-in `/imagine`, `/imagine-video` (and agent Imagine tools) | **Grok Imagine** (xAI) — **image + video** |
+| **Antigravity (`agy`)** | Ask for images while working **inside** Antigravity / Gemini agent | **Nano Banana / Gemini Image** (Google) — **images only** |
+| **Codex CLI / app** | Built-in imagegen skill / `image_gen` (ChatGPT login; feature `image_generation`) | **gpt-image** — **images only** (no videogen skill; Sora ≠ Codex built-in). Verified 2026-07-17. |
+| Claude Code, … | Host features or MCP (e.g. sibling **`grok-build-media`** for Grok subscription media) | Varies |
+
+> **This plugin’s `/codex-*` is code review, not image gen.** To get Codex images, run **Codex as main**, not `/codex-review` from Grok. Full multi-engine SoT: [`../docs/GROK-MEDIA.md`](../docs/GROK-MEDIA.md).
 
 So:
 
@@ -124,7 +138,8 @@ So:
 | --- | --- | --- |
 | **`grok-peer` (this repo)** | Grok → Codex / Kimi / `agy` peer slash | ❌ |
 | [`howardpen9/grok-mcp`](https://github.com/howardpen9/grok-mcp) | Any MCP host → Grok as **reviewer / second opinion** | ❌ (by design) |
-| Community **xAI / Grok Imagine MCP**s (e.g. full-API servers with `generate_image`) | Claude Code / other hosts → xAI image (and often chat/search) API | ✅ Separate category — **not** Grok Build, **not** this plugin |
+| [`grok-build-media`](../grok-build-media) (sibling in monorepo) | Claude Code / other hosts → **local Grok Build** Imagine (OAuth **subscription** quota) | ✅ image + video via `grok -p` — **not** this plugin, **not** API-key Imagine |
+| Community **xAI / Grok Imagine MCP**s (e.g. full-API servers with `generate_image`) | Claude Code / other hosts → xAI image (and often chat/search) **API key** | ✅ Separate category — **not** Grok Build TUI, **not** this plugin |
 
 ### Common misconceptions
 

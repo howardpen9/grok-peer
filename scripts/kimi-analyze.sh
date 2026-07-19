@@ -62,17 +62,21 @@ $QUERY
 Working directory: $WORK_DIR
 Read the repository as needed. Do not modify files."
 
-echo "grok-peer: kimi analyze work_dir=$WORK_DIR detail=$DETAIL" >&2
+# Pin K3 unless caller overrides (KIMICODE_MODEL / KIMI_MODEL / GROK_PEER_KIMI_MODEL).
+# CLI alias form matches `kimi provider list` → kimi-code/k3
+KIMI_MODEL_ALIAS="${GROK_PEER_KIMI_MODEL:-${KIMICODE_MODEL:-${KIMI_MODEL:-kimi-code/k3}}}"
 
-# kimi -p: one-shot non-interactive
+echo "grok-peer: kimi analyze work_dir=$WORK_DIR detail=$DETAIL model=$KIMI_MODEL_ALIAS" >&2
+
+# kimi -p: one-shot non-interactive; always pass -m so model is explicit (not only config default).
 # Prefer --work-dir if supported; else -w / cd.
 if "$KIMI" --help 2>&1 | grep -qE -- '--work-dir|-w'; then
   if "$KIMI" --help 2>&1 | grep -q -- '--work-dir'; then
-    exec "$KIMI" --work-dir "$WORK_DIR" -p "$FULL_PROMPT" --output-format text
+    exec "$KIMI" -m "$KIMI_MODEL_ALIAS" --work-dir "$WORK_DIR" -p "$FULL_PROMPT" --output-format text
   else
-    exec "$KIMI" -w "$WORK_DIR" -p "$FULL_PROMPT" --output-format text
+    exec "$KIMI" -m "$KIMI_MODEL_ALIAS" -w "$WORK_DIR" -p "$FULL_PROMPT" --output-format text
   fi
 else
   cd "$WORK_DIR"
-  exec "$KIMI" -p "$FULL_PROMPT" --output-format text
+  exec "$KIMI" -m "$KIMI_MODEL_ALIAS" -p "$FULL_PROMPT" --output-format text
 fi
