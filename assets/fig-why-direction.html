@@ -33,16 +33,30 @@
   .legend {
     display: flex;
     flex-wrap: wrap;
-    gap: 18px 28px;
+    align-items: center;
+    gap: 10px 22px;
     margin-bottom: 28px;
+    padding: 12px 16px;
     font-size: 15px;
-    color: #a8b3c0;
+    color: #d1d9e3;
+    background: #151c25;
+    border: 1px solid #2a3544;
+    border-radius: 12px;
+    width: fit-content;
   }
-  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .legend-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #64748b;
+    margin-right: 4px;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
   .sq {
     display: inline-block;
-    width: 14px;
-    height: 14px;
+    width: 15px;
+    height: 15px;
     border-radius: 3px;
     flex-shrink: 0;
   }
@@ -237,6 +251,7 @@
   </p>
 
   <div class="legend">
+    <span class="legend-label">Color key</span>
     <span><i class="sq sq-claude"></i> Claude</span>
     <span><i class="sq sq-codex"></i> Codex</span>
     <span><i class="sq sq-grok"></i> Grok</span>

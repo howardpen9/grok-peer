@@ -24,15 +24,10 @@
 In 2026 most machines run **several** coding agents at once — Claude Code, Codex, Grok Build, Kimi, Antigravity, Cursor… each with its own login and quota. The ecosystem already solved **🟧 Claude as main**. When **⬛ Grok is the conductor**, the peer edges were empty.
 
 <p align="center">
-  <img src="assets/fig-why-direction.png" alt="Direction map: Claude peer edges are filled; Grok → Codex / Kimi / Antigravity was empty — green ring shows why grok-peer exists" width="100%" />
+  <img src="assets/fig-why-direction.png" alt="Direction map with color key: Claude peer edges are filled; green ring marks Grok → Codex / Kimi / Antigravity gap that grok-peer fills" width="100%" />
 </p>
 
-<p align="center"><sub>
-  Color key: 🟧 Claude · ⬜ Codex · ⬛ Grok · 🟪 Kimi · 🟦 Antigravity (<code>agy</code>).
-  Green ring = the gap this package ships.
-</sub></p>
-
-**This package fills the Grok-as-main (⬛) row.** If your daily driver is **Grok Build**, opening Claude just to run `/codex` is the wrong UX — peers should live **where you already are**.
+**This package fills the Grok-as-main row.** If your daily driver is **Grok Build**, opening Claude just to run `/codex` is the wrong UX — peers should live **where you already are**.
 
 <details>
 <summary>Text table (same data, accessible / copy-paste)</summary>
