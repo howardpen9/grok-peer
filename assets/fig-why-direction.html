@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Why grok-peer exists — direction map</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    width: 1280px;
+    background: #0b0f14;
+    color: #e8edf2;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  body { padding: 48px 56px 0; }
+
+  h1 {
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+  }
+  .sub {
+    font-size: 18px;
+    color: #8b98a8;
+    line-height: 1.45;
+    margin-bottom: 36px;
+    max-width: 980px;
+  }
+  .sub strong { color: #d7e0ea; font-weight: 600; }
+
+  /* legend */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 28px;
+    margin-bottom: 28px;
+    font-size: 15px;
+    color: #a8b3c0;
+  }
+  .legend span { display: inline-flex; align-items: center; gap: 8px; }
+  .sq {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .sq-claude { background: #f5a524; }
+  .sq-codex  { background: #f4f4f5; border: 1px solid #9ca3af; }
+  .sq-grok   { background: #0a0a0a; border: 1.5px solid #e5e7eb; box-shadow: 0 0 0 1px #27272a; }
+  .sq-kimi   { background: #a855f7; }
+  .sq-agy    { background: #3b82f6; }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: 16px;
+    border: 1px solid #2a3544;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #121820;
+  }
+  thead th {
+    background: #1a222d;
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 14px 18px;
+    border-bottom: 1px solid #2a3544;
+  }
+  tbody td {
+    padding: 15px 18px;
+    border-bottom: 1px solid #1e2833;
+    vertical-align: middle;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr.ok { background: #121820; }
+  tbody tr.mid { background: #141a22; }
+  tbody tr.gap {
+    background: #0f1a14;
+  }
+
+  .dir {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .arrow { color: #64748b; font-weight: 500; margin: 0 2px; }
+  .name { color: #e8edf2; }
+
+  .ex { color: #94a3b8; font-size: 15px; line-height: 1.35; }
+  .ex code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 13px;
+    background: #1e293b;
+    color: #cbd5e1;
+    padding: 2px 7px;
+    border-radius: 6px;
+  }
+  .ex a { color: #7dd3fc; text-decoration: none; }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .status.good { color: #3dd68c; }
+  .status.warn { color: #f5a524; }
+  .status.bad  { color: #f87171; }
+  .dot {
+    width: 18px; height: 18px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; flex-shrink: 0;
+  }
+  .dot.good { background: rgba(61,214,140,0.15); color: #3dd68c; border: 1.5px solid #3dd68c; }
+  .dot.warn { background: rgba(245,165,36,0.12); color: #f5a524; border: 1.5px solid #f5a524; }
+  .dot.bad  { background: rgba(248,113,113,0.12); color: #f87171; border: 1.5px solid #f87171; }
+
+  /* highlight ring around gap block */
+  .gap-wrap {
+    position: relative;
+    margin-top: 0;
+  }
+  /* paint ring over gap rows via outer frame */
+  tbody tr.gap td:first-child {
+    box-shadow: inset 3px 0 0 #3dd68c;
+  }
+  tbody tr.gap-first td {
+    border-top: 2px solid #3dd68c;
+  }
+  tbody tr.gap-last td {
+    border-bottom: 2px solid #3dd68c !important;
+  }
+  tbody tr.gap td:first-child {
+    border-left: 2px solid #3dd68c;
+  }
+  tbody tr.gap td:last-child {
+    border-right: 2px solid #3dd68c;
+  }
+  /* corner radius illusion for gap block */
+  tbody tr.gap-first td:first-child { border-top-left-radius: 10px; }
+  tbody tr.gap-first td:last-child  { border-top-right-radius: 10px; }
+  tbody tr.gap-last td:first-child  { border-bottom-left-radius: 10px; }
+  tbody tr.gap-last td:last-child   { border-bottom-right-radius: 10px; }
+
+  .gap-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 10px;
+    background: #13261c;
+    border: 1px solid #3dd68c;
+    color: #86efac;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    text-transform: uppercase;
+  }
+  .gap-badge .pulse {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: #3dd68c;
+    box-shadow: 0 0 0 3px rgba(61,214,140,0.25);
+  }
+
+  .callout {
+    margin-top: 22px;
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    border-radius: 14px;
+    overflow: hidden;
+    border: 1px solid #1f6b45;
+    background: #0f1a14;
+  }
+  .callout-bar {
+    width: 8px;
+    background: #3dd68c;
+    flex-shrink: 0;
+  }
+  .callout-body {
+    padding: 20px 24px;
+  }
+  .callout-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #d7f5e6;
+    margin-bottom: 6px;
+  }
+  .callout-title .tag {
+    display: inline-block;
+    margin-left: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #0b0f14;
+    background: #3dd68c;
+    padding: 2px 8px;
+    border-radius: 6px;
+    vertical-align: middle;
+  }
+  .callout-text {
+    font-size: 15px;
+    color: #9fb7a8;
+    line-height: 1.45;
+  }
+  .callout-text strong { color: #c8ecd8; }
+
+  .footer {
+    margin-top: 36px;
+    margin-left: -56px;
+    margin-right: -56px;
+    background: #13261c;
+    padding: 22px 56px;
+    font-size: 17px;
+    font-weight: 600;
+    color: #d7f5e6;
+  }
+  .footer span { color: #3dd68c; }
+</style>
+</head>
+<body>
+  <h1>Why this exists</h1>
+  <p class="sub">
+    Multi-agent machines are normal. The ecosystem already solved
+    <strong>🟧 Claude as main</strong>. When <strong>⬛ Grok is the conductor</strong>,
+    the peer edges were empty — that gap is <strong>grok-peer</strong>.
+  </p>
+
+  <div class="legend">
+    <span><i class="sq sq-claude"></i> Claude</span>
+    <span><i class="sq sq-codex"></i> Codex</span>
+    <span><i class="sq sq-grok"></i> Grok</span>
+    <span><i class="sq sq-kimi"></i> Kimi</span>
+    <span><i class="sq sq-agy"></i> Antigravity (agy)</span>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:32%">Direction (main → peer)</th>
+        <th style="width:42%">Example</th>
+        <th style="width:26%">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="ok">
+        <td>
+          <div class="dir">
+            <i class="sq sq-claude"></i><span class="name">Claude</span>
+            <span class="arrow">→</span>
+            <i class="sq sq-codex"></i><span class="name">Codex</span>
+          </div>
+        </td>
+        <td class="ex">Official <code>openai/codex-plugin-cc</code> · <code>/codex:review</code></td>
+        <td><span class="status good"><span class="dot good">✓</span> Product-grade</span></td>
+      </tr>
+      <tr class="ok">
+        <td>
+          <div class="dir">
+            <i class="sq sq-claude"></i><span class="name">Claude</span>
+            <span class="arrow">→</span>
+            <i class="sq sq-grok"></i><span class="name">Grok</span>
+          </div>
+        </td>
+        <td class="ex">Community plugins (Claude ↔ Grok review / search)</td>
+        <td><span class="status good"><span class="dot good">✓</span> Common</span></td>
+      </tr>
+      <tr class="ok">
+        <td>
+          <div class="dir">
+            <i class="sq sq-claude"></i><span class="name">Claude</span>
+            <span class="arrow">→</span>
+            <i class="sq sq-kimi"></i><span class="name">Kimi</span>
+          </div>
+        </td>
+        <td class="ex"><code>kimi-code-mcp</code> as MCP tools</td>
+        <td><span class="status good"><span class="dot good">✓</span> Transport ready</span></td>
+      </tr>
+      <tr class="mid">
+        <td>
+          <div class="dir">
+            <i class="sq sq-codex"></i><span class="name">Codex</span>
+            <span class="arrow">→</span>
+            <i class="sq sq-grok"></i><span class="name">Grok / others</span>
+          </div>
+        </td>
+        <td class="ex">Codex plugins / MCP bridges</td>
+        <td><span class="status warn"><span class="dot warn">△</span> Exists, uneven</span></td>
+      </tr>
+
+      <!-- THE GAP — circled by CSS borders + callout -->
+      <tr class="gap gap-first">
+        <td>
+          <div class="dir">
+            <i class="sq sq-grok"></i><span class="name">Grok</span>
+            <span class="arrow">→</span>
+            <i class="sq sq-codex"></i><span class="name">Codex</span>
+            <span class="gap-badge"><span class="pulse"></span> filled here</span>
+          </div>
+        </td>
+        <td class="ex"><code>/codex-review</code> · <code>/codex-adversarial</code></td>
+        <td><span class="status bad"><span class="dot bad">×</span> Was empty</span></td>
+      </tr>
+      <tr class="gap">
+        <td>
+          <div class="dir">
+            <i class="sq sq-grok"></i><span class="name">Grok</span>
+            <span class="arrow">→</span>
+            <i class="sq sq-kimi"></i><span class="name">Kimi</span>
+            <span class="gap-badge"><span class="pulse"></span> filled here</span>
+          </div>
+        </td>
+        <td class="ex"><code>/kimi-analyze</code></td>
+        <td><span class="status bad"><span class="dot bad">×</span> Was empty</span></td>
+      </tr>
+      <tr class="gap">
+        <td>
+          <div class="dir">
+            <i class="sq sq-grok"></i><span class="name">Grok</span>
+            <span class="arrow">→</span>
+            <i class="sq sq-agy"></i><span class="name">Antigravity</span>
+            <span class="gap-badge"><span class="pulse"></span> filled here</span>
+          </div>
+        </td>
+        <td class="ex"><code>/gemini</code> via local <code>agy</code></td>
+        <td><span class="status bad"><span class="dot bad">×</span> Was empty</span></td>
+      </tr>
+      <tr class="gap gap-last">
+        <td>
+          <div class="dir">
+            <i class="sq sq-grok"></i><span class="name">Grok</span>
+            <span class="arrow">→</span>
+            <i class="sq sq-claude"></i><span class="name">Claude</span>
+          </div>
+        </td>
+        <td class="ex">Still thin — not this package’s first ship</td>
+        <td><span class="status bad"><span class="dot bad">×</span> Still empty</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-bar"></div>
+    <div class="callout-body">
+      <div class="callout-title">
+        Green ring = the reason this repo exists
+        <span class="tag">WHY GROK-PEER</span>
+      </div>
+      <div class="callout-text">
+        Claude’s peer row is mostly solved. <strong>Grok-as-main had no product-shaped slash surface</strong>
+        for Codex, Kimi, or Antigravity. <strong>grok-peer</strong> ships those edges where you already work —
+        no window hop.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Ship the call surface on <span>⬛ Grok Build</span>
+    → <span>/codex-review</span> · <span>/kimi-analyze</span> · <span>/gemini</span>
+  </div>
+</body>
+</html>

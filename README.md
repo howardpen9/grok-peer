@@ -21,9 +21,21 @@
 
 ## Why this exists
 
-In 2026 most machines run **several** coding agents at once — Claude Code, Codex, Grok Build, Kimi, Antigravity, Cursor… each with its own login and quota.
+In 2026 most machines run **several** coding agents at once — Claude Code, Codex, Grok Build, Kimi, Antigravity, Cursor… each with its own login and quota. The ecosystem already solved **🟧 Claude as main**. When **⬛ Grok is the conductor**, the peer edges were empty.
 
-The ecosystem already solved **one direction** well: **Claude as main**, other models as peers.
+<p align="center">
+  <img src="assets/fig-why-direction.png" alt="Direction map: Claude peer edges are filled; Grok → Codex / Kimi / Antigravity was empty — green ring shows why grok-peer exists" width="100%" />
+</p>
+
+<p align="center"><sub>
+  Color key: 🟧 Claude · ⬜ Codex · ⬛ Grok · 🟪 Kimi · 🟦 Antigravity (<code>agy</code>).
+  Green ring = the gap this package ships.
+</sub></p>
+
+**This package fills the Grok-as-main (⬛) row.** If your daily driver is **Grok Build**, opening Claude just to run `/codex` is the wrong UX — peers should live **where you already are**.
+
+<details>
+<summary>Text table (same data, accessible / copy-paste)</summary>
 
 | Direction (main → peer) | Example | Status |
 | --- | --- | --- |
@@ -31,31 +43,18 @@ The ecosystem already solved **one direction** well: **Claude as main**, other m
 | **🟧 Claude → ⬛ Grok** | Community plugins (e.g. Claude↔Grok review / search wrappers) | ✅ Common |
 | **🟧 Claude → 🟪 Kimi** | [`kimi-code-mcp`](https://github.com/howardpen9/kimi-code-mcp) as MCP tools | ✅ Transport ready |
 | **⬜ Codex → ⬛ Grok / others** | Codex plugins / MCP bridges | △ Exists, uneven |
-| **⬛ Grok → ⬜ Codex** | — | ❌ Thin / empty *(filled by this plugin)* |
-| **⬛ Grok → 🟪 Kimi** | — | ❌ Thin / empty *(filled by this plugin)* |
-| **⬛ Grok → 🟦 Antigravity (`agy`)** | — | ❌ Thin / empty *(filled by this plugin)* |
-| **⬛ Grok → 🟧 Claude** | — | ❌ Thin / empty |
+| **⬛ Grok → ⬜ Codex** | `/codex-review` · `/codex-adversarial` | ❌ Was empty *(filled here)* |
+| **⬛ Grok → 🟪 Kimi** | `/kimi-analyze` | ❌ Was empty *(filled here)* |
+| **⬛ Grok → 🟦 Antigravity (`agy`)** | `/gemini` via local `agy` | ❌ Was empty *(filled here)* |
+| **⬛ Grok → 🟧 Claude** | — | ❌ Still empty |
 
-<p>
-  <sub>
-    Color key:
-    🟧 Claude ·
-    ⬜ Codex ·
-    ⬛ Grok ·
-    🟪 Kimi ·
-    🟦 Antigravity (<code>agy</code>)
-  </sub>
-</p>
-
-**This package fills the Grok-as-main (⬛) row.**
-
-If your daily driver is **Grok Build**, opening Claude just to run `/codex` is the wrong UX. You want peers **where you already are**.
+</details>
 
 <p align="center">
   <img src="assets/fig-peer-matrix.jpg" alt="Peer matrix: Claude main has official Codex; Grok main was empty" width="90%" />
 </p>
 
-<p align="center"><sub>Rows = conductor (main agent). Columns = peer. Official depth sits on Claude → Codex. Grok’s row was the gap.</sub></p>
+<p align="center"><sub>Matrix view: rows = conductor (main). Columns = peer. Official depth sits on Claude → Codex. Grok’s row was the gap.</sub></p>
 
 ---
 
